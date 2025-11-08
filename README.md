@@ -13,7 +13,7 @@ The core finding is driven by the **Demand Index**, a **synthetic metric** combi
 The data pipeline employs a robust dimensional model to ensure optimal performance and query efficiency for reporting. The analytical schema is structured as a Star Schema, with `fact_questions` serving as the central table. 
 
 
-![Diagram Star Schema Model](./assets/star_schema.png)
+![Diagram Star Schema Model](assets/star_schema_diagram.jpeg) 
 
 | Table | Type | Description |
 | :--- | :--- | :--- |
