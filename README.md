@@ -1,1 +1,72 @@
-🧠 Stack Overflow Data Insights — Answer Gaps Analysis📖 IntroductionThis project was developed as part of a technical data assessment, simulating real-world data delivery conditions. It covers the full analytical lifecycle—from sourcing and modeling data, to building an analytical data model and generating visualizations that surface actionable insights.The exercise focuses on the Stack Overflow public dataset, with the primary goal of identifying which topics (tags) demonstrate the highest need for answers (i.e., the greatest gap between demand and resolution).The project demonstrates production-minded data practices, including:End-to-end data sourcing, transformation, and presentation.Dimensional data modeling (Star Schema) in Google BigQuery.Utilizing dbt (Data Build Tool) for modular data transformation and testing.Looker Studio for clear data storytelling and insights visualization.🎯 Objective: Which topics have the highest need for answers?To address this core business question, the project analyzes questions, answers, users, and tags from the Stack Overflow public dataset. The data is modeled into an analytical schema optimized for reporting and exploration.The Need for Answers (Demand Index) is defined as a synthetic metric combining demand (views) with the lack of resolution (unanswered status).🧩 Project Architecture: Dimensional Star SchemaThe data pipeline utilizes a robust dimensional approach, with a central fact table surrounded by key dimension tables.Fact TablesTableDescriptionPrimary Key (PK)fact_questionsThe central fact table. Captures each question’s core metrics (views, score, answer_count, is_answered, etc.).question_idfact_question_tagA bridge table connecting questions to their tags (many-to-many relationship).question_tag_idDimension TablesTableDescriptionExample Fieldsdim_usersInformation about the question authors (owners) and their reputation metrics.user_id, display_name, reputationdim_tagsMetadata for each tag, its name, and usage frequency.tag_id, tag_name, countdim_timeA standard calendar dimension for analyzing question creation and activity dates.time_id, full_date, year, month🛠️ Data Transformation (dbt) and QualityThe transformation logic and the creation of the analytical schema were entirely implemented using dbt.Naming Conventions and TestingAreaProduction PracticeDescriptionModelingLayered ArchitectureModels are separated into staging, intermediate, and marts (dim_ and fct_) layers for modularity.TestingGeneric Testingunique and not_null tests are enforced on all Primary Keys (PK) and Foreign Keys (FK) to guarantee data integrity.SourcesSource DeclarationAll raw tables are defined using the dbt source() block for clear data lineage management.DocumentationComprehensive DocumentationEvery model, column, and source is documented in .yml files, facilitating automatic documentation generation (dbt docs).Key Demand MetricsThe following metrics were computed to identify the "underserved" topics:Unresolved Questions: COUNT of questions where is_answered = 0 (no answer received).Total Views of Unresolved: SUM of the view counts for all unanswered questions.Demand Index (Final Metric): (Total Views of Unresolved / Unresolved Questions). This metric quantifies the average number of views per unresolved problem, serving as the ultimate indicator of high user frustration/demand.📈 Insights Visualization (Looker Studio)The analysis culminates in a Looker Studio dashboard designed to quickly convey the answer gaps.Primary Visualization: A Scatter Chart comparing the Count of Unresolved Questions (X-Axis) against the Demand Index (Y-Axis).Insight: Tags located in the upper-right quadrant represent the greatest overlap of persistent problems and high user demand.Report Access: [Insert Link to your public Looker Studio report]🚀 Getting StartedPrerequisitesAccess to Google BigQuery and permissions to create datasets.dbt-bigquery installed locally (via pip).Local SetupClone the repository: git clone [URL]Configure your profiles.yml file (local to your machine) with your BigQuery project credentials.Running the TransformationInstall dbt packages (if applicable): dbt depsRun data quality tests: dbt testBuild the entire data model: dbt buildThe fully transformed analytical tables will be created in your target BigQuery dataset, ready for consumption by Looker Studio.
+# 🧠 Stack Overflow Data Insights — Answer Gaps Analysis
+
+[![Status](https://img.shields.io/badge/Status-Complete-success.svg)](https://github.com/YourUsername/YourRepo/actions)
+[![Data Model](https://img.shields.io/badge/Model-Star_Schema-blue.svg)](./models/README.md)
+[![Powered By](https://img.shields.io/badge/Powered_by-dbt_%7C_BigQuery-orange.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+
+## 📖 Introduction & Objective
+
+This project simulates a technical data assessment focusing on the **Stack Overflow public dataset**. The goal is to identify topics (**tags**) that demonstrate the **highest need for answers**—the gap between demand and resolution.
+
+The project showcases **production-minded data practices**, including:
+* End-to-end data processing.
+* **Dimensional Modeling** (Star Schema) in **BigQuery**.
+* **dbt** for transformation and testing.
+* **Looker Studio** for actionable insights.
+
+The **Need for Answers (Demand Index)** is a **synthetic metric** combining **demand (views)** with the **lack of resolution (unanswered status)**.
+
+---
+
+## 🧩 Project Architecture: Star Schema
+
+The data pipeline uses a robust dimensional model for reporting optimization. 
+
+*Note: The analytical schema is a Star Schema with `fact_questions` as the central table, surrounded by `dim_users`, `dim_tags`, and `dim_time`.*
+
+| Table | Type | Description |
+| :--- | :--- | :--- |
+| **`fact_questions`** | Fact | Central table capturing core question metrics (views, score, `is_answered`). |
+| **`fact_question_tag`** | Bridge | Links questions to multiple tags (many-to-many). |
+| **`dim_users`** | Dimension | User information and reputation. |
+| **`dim_tags`** | Dimension | Tag metadata and usage frequency. |
+
+---
+
+## 🛠️ Data Quality & Key Metrics (dbt)
+
+### Production Practices
+* **Layered Architecture:** Models are structured into `staging`, `intermediate`, and `marts`.
+* **Testing:** **`unique`** and **`not_null`** tests are enforced on all keys.
+* **Documentation:** Comprehensive documentation is provided via **dbt docs**.
+
+### Demand Metrics
+The analysis is driven by the **Demand Index**:
+
+$$\text{Demand Index} = \frac{\text{Total Views of Unresolved}}{\text{Unresolved Questions (is\_answered = 0)}}$$
+
+---
+
+## 📈 Insights Visualization (Looker Studio)
+
+The analysis is presented in a Looker Studio dashboard:
+
+* **Primary Visualization:** A **Scatter Chart** comparing **Unresolved Question Count** (X-Axis) vs. **Demand Index** (Y-Axis).
+* **Insight:** Tags in the **upper-right quadrant** represent the greatest overlap of persistent problems and high user demand.
+* **Report Access:** **[Insert Link to your public Looker Studio report]**
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+1.  Access to **Google BigQuery**.
+2.  **dbt-bigquery** installed.
+
+### Run Transformation
+1.  Configure **`profiles.yml`** locally.
+2.  Install dependencies: `dbt deps`
+3.  Build the data model: `dbt build`
+
+The analytical tables will be created in your target BigQuery dataset.
