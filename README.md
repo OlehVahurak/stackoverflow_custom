@@ -74,7 +74,7 @@ Once the environment variables are set, you can run the project from the root di
 dbt deps     # Installs any necessary dbt packages
 dbt debug    # Verifies the connection and configuration
 dbt build    # Executes all models in the correct order
-
+```
 2.  Install dbt packages: `dbt deps`
 3.  Build the data model: `dbt build`
 
