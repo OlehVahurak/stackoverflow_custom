@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  ##########################################
+  # 1. Dimension: dim_users
+  ##########################################
+  - name: dim_users
+    description: "Dimension containing metadata about users (question authors) from the Stack Overflow platform."
+    columns:
+      - name: user_id
+        description: "Unique User Identifier (Primary Key - PK)."
+        tests:
+          - unique # Test: Ensures the key is unique
+          - not_null # Test: Ensures the key is not null
+      
+      - name: display_name
+        description: "The user's displayed name."
+        tests:
+          - not_null
+      
+      - name: reputation
+        description: "The user's current reputation score."
+        
+      - name: creation_date
+        description: "The date the user's account was created."
+
+  ##########################################
+  # 2. Dimension: dim_tags
+  ##########################################
+  - name: dim_tags
+    description: "Dimension containing metadata about technical tags (topics)."
+    columns:
+      - name: tag_id
+        description: "Unique Tag Identifier (PK)."
+        tests:
+          - unique
+          - not_null
+      
+      - name: tag_name
+        description: "The name of the tag (e.g., 'python', 'javascript')."
+        tests:
+          - not_null
+
+  ##########################################
+  # 3. Fact Table: fact_questions
+  ##########################################
+  - name: fact_questions
+    description: "The primary transactional fact table capturing key metrics and foreign keys for every question post."
+    columns:
+      - name: question_id
+        description: "Unique Question Identifier (PK for the fact table)."
+        tests:
+          - unique
+          - not_null
+
+      - name: owner_user_id
+        description: "Foreign Key (FK) linking to the dim_users dimension."
+        tests:
+          - not_null
+          - relationships: # Test: Ensures referential integrity with dim_users
+              to: ref('dim_users')
+              field: user_id
+
+      - name: creation_time_id
+        description: "Foreign Key (FK) linking to the dim_time dimension."
+        tests:
+          - not_null
+          - relationships: # Test: Ensures referential integrity with dim_time
+              to: ref('dim_time')
+              field: time_id
+
+      - name: view_count
+        description: "The number of times the question has been viewed (Measure)."
+      
+      - name: is_unanswered_flag
+        description: "Flag (1/0) indicating if the question lacks an accepted answer (NULL accepted_answer_id). CRITICAL FOR ASSESSMENT."
+        tests:
+          - accepted_values: # Test: Ensures the value is restricted to 0 or 1
+              values: [0, 1]
+
+  ##########################################
+  # 4. Bridge Table: fact_question_tag
+  ##########################################
+  - name: fact_question_tag
+    description: "Bridge table linking questions to multiple tags (a many-to-many relationship)."
+    columns:
+      - name: question_id
+        description: "Foreign Key to fact_questions."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fact_questions')
+              field: question_id
+              
+      - name: tag_id
+        description: "Foreign Key to dim_tags."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_tags')
+              field: tag_id
