@@ -37,16 +37,44 @@ The final analysis is presented in a Looker Studio dashboard:
 
 ---
 
-## 🚀 Getting Started
 
-To replicate the project and build the analytical tables in your environment:
 
-### Prerequisites
-1.  Access to **Google BigQuery**.
-2.  **dbt-bigquery** installed locally (via pip).
 
-### Run Transformation
-1.  Configure your local **`profiles.yml`** file with your BigQuery credentials.
+
+### ⚙️ Environment Configuration
+
+To successfully run this dbt project, you must configure your local credentials for Google BigQuery.
+
+1.  **Prerequisites:** Ensure you have the necessary tools installed:
+    ```bash
+    pip install dbt-bigquery
+    ```
+
+2.  **Service Account Key:** Obtain a JSON key file for a Google Service Account that has, at minimum, the `BigQuery Data Editor` and `BigQuery Job User` roles within your GCP project.
+
+3.  **Configure `profiles.yml`:** Create or update your local `~/.dbt/profiles.yml` file with the configuration structure shown in Step 1 (the environment variable-based configuration).
+
+4.  **Set Environment Variables:** Before running any dbt command, set the required environment variables in your terminal session. Replace the placeholder values with your actual data:
+    ```bash
+    # Set the absolute path to your downloaded Service Account JSON key
+    export DBT_BIGQUERY_KEYFILE="/home/user/path/to/your/keyfile.json"
+    
+    # Set your GCP Project ID (where the tables will be built)
+    export DBT_TARGET_PROJECT="your-gcp-project-id"
+    
+    # Optional: Set the target BigQuery dataset (schema) name
+    export DBT_TARGET_DATASET="dbt_so_insights_dev" 
+    ```
+
+### Running the Project
+
+Once the environment variables are set, you can run the project from the root directory (`stack_overflow_insights/`):
+
+```bash
+dbt deps     # Installs any necessary dbt packages
+dbt debug    # Verifies the connection and configuration
+dbt build    # Executes all models in the correct order
+
 2.  Install dbt packages: `dbt deps`
 3.  Build the data model: `dbt build`
 
