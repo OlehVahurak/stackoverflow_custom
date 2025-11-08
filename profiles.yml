@@ -1,0 +1,10 @@
+stack_overflow_insights:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth  # <--- Zmień na 'oauth'
+      # Usuń lub zakomentuj wiersz keyfile
+      # keyfile: "{{ env_var('DBT_BIGQUERY_KEYFILE') }}" 
+      project: "{{ env_var('DBT_TARGET_PROJECT') }}"
+      dataset: "{{ env_var('DBT_TARGET_DATASET', 'dbt_so_insights_dev') }}"
