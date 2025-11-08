@@ -1,72 +1,49 @@
-# 🧠 Stack Overflow Data Insights — Answer Gaps Analysis
+# Stack Overflow Data Insights
 
-[![Status](https://img.shields.io/badge/Status-Complete-success.svg)](https://github.com/YourUsername/YourRepo/actions)
-[![Data Model](https://img.shields.io/badge/Model-Star_Schema-blue.svg)](./models/README.md)
-[![Powered By](https://img.shields.io/badge/Powered_by-dbt_%7C_BigQuery-orange.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+## Introduction
 
-## 📖 Introduction & Objective
+This project simulates a comprehensive technical data assessment, covering the entire analytical lifecycle from sourcing raw data to surfacing actionable insights. The focus is the **Stack Overflow public dataset**, aiming to pinpoint which topics (**tags**) demonstrate the **highest need for answers**—quantifying the gap between community demand and available resolution.
 
-This project simulates a technical data assessment focusing on the **Stack Overflow public dataset**. The goal is to identify topics (**tags**) that demonstrate the **highest need for answers**—the gap between demand and resolution.
-
-The project showcases **production-minded data practices**, including:
-* End-to-end data processing.
-* **Dimensional Modeling** (Star Schema) in **BigQuery**.
-* **dbt** for transformation and testing.
-* **Looker Studio** for actionable insights.
-
-The **Need for Answers (Demand Index)** is a **synthetic metric** combining **demand (views)** with the **lack of resolution (unanswered status)**.
+The core finding is driven by the **Demand Index**, a **synthetic metric** combining **views** with the **unresolved_questions**.
 
 ---
 
-## 🧩 Project Architecture: Star Schema
+## 🧩 Project Architecture: Star Schema Design
 
-The data pipeline uses a robust dimensional model for reporting optimization. 
-
-*Note: The analytical schema is a Star Schema with `fact_questions` as the central table, surrounded by `dim_users`, `dim_tags`, and `dim_time`.*
+The data pipeline employs a robust dimensional model to ensure optimal performance and query efficiency for reporting. The analytical schema is structured as a Star Schema, with `fact_questions` serving as the central table. 
 
 | Table | Type | Description |
 | :--- | :--- | :--- |
 | **`fact_questions`** | Fact | Central table capturing core question metrics (views, score, `is_answered`). |
-| **`fact_question_tag`** | Bridge | Links questions to multiple tags (many-to-many). |
-| **`dim_users`** | Dimension | User information and reputation. |
-| **`dim_tags`** | Dimension | Tag metadata and usage frequency. |
+| **`fact_question_tag`** | Bridge | Links individual questions to multiple tags (many-to-many relationship). |
+| **`dim_users`** | Dimension | User information, including authorship and reputation metrics. |
+| **`dim_tags`** | Dimension | Tag metadata, names, and frequency of use across the platform. |
+| **`dim_time`** | Dimension | Standard calendar dimension for analyzing question creation and activity dates. |
 
 ---
 
-## 🛠️ Data Quality & Key Metrics (dbt)
-
-### Production Practices
-* **Layered Architecture:** Models are structured into `staging`, `intermediate`, and `marts`.
-* **Testing:** **`unique`** and **`not_null`** tests are enforced on all keys.
-* **Documentation:** Comprehensive documentation is provided via **dbt docs**.
-
-### Demand Metrics
-The analysis is driven by the **Demand Index**:
-
-$$\text{Demand Index} = \frac{\text{Total Views of Unresolved}}{\text{Unresolved Questions (is\_answered = 0)}}$$
-
----
 
 ## 📈 Insights Visualization (Looker Studio)
 
-The analysis is presented in a Looker Studio dashboard:
+The final analysis is presented in a Looker Studio dashboard:
 
-* **Primary Visualization:** A **Scatter Chart** comparing **Unresolved Question Count** (X-Axis) vs. **Demand Index** (Y-Axis).
-* **Insight:** Tags in the **upper-right quadrant** represent the greatest overlap of persistent problems and high user demand.
+* **Primary Visualization:** A **Scatter Chart** comparing **Unresolved Question Count** (X-Axis) vs. **Demand Index** (Y-Axis). 
+* **Insight:** Tags situated in the **upper-right quadrant** represent the most significant overlap of persistent problems and high user demand.
 * **Report Access:** **[Insert Link to your public Looker Studio report]**
 
 ---
 
 ## 🚀 Getting Started
 
+To replicate the project and build the analytical tables in your environment:
+
 ### Prerequisites
 1.  Access to **Google BigQuery**.
-2.  **dbt-bigquery** installed.
+2.  **dbt-bigquery** installed locally (via pip).
 
 ### Run Transformation
-1.  Configure **`profiles.yml`** locally.
-2.  Install dependencies: `dbt deps`
+1.  Configure your local **`profiles.yml`** file with your BigQuery credentials.
+2.  Install dbt packages: `dbt deps`
 3.  Build the data model: `dbt build`
 
-The analytical tables will be created in your target BigQuery dataset.
+The fully transformed analytical tables will be created in your target BigQuery dataset.
