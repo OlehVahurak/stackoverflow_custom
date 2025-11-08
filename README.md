@@ -52,7 +52,24 @@ To successfully run this dbt project, you must configure your local credentials 
 
 2.  **Service Account Key:** Obtain a JSON key file for a Google Service Account that has, at minimum, the `BigQuery Data Editor` and `BigQuery Job User` roles within your GCP project.
 
-3.  **Configure `profiles.yml`:** Create or update your local `~/.dbt/profiles.yml` file with the configuration structure shown in Step 1 (the environment variable-based configuration).
+3.  **Configure `profiles.yml`:** Create or update your local `~/.dbt/profiles.yml` file with the configuration structure shown below:
+
+```bash
+stack_overflow_insights: # <-- PROFILE NAME MUST MATCH dbt_project.yml
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account-json
+      # The path to the JSON key is retrieved from the environment variable
+      keyfile: "{{ env_var('DBT_BIGQUERY_KEYFILE') }}"
+      # The GCP Project ID is retrieved from the environment variable
+      project: "{{ env_var('DBT_TARGET_PROJECT') }}"
+      # The dataset name is retrieved from the environment variable (or uses a default value)
+      dataset: "{{ env_var('DBT_TARGET_DATASET', 'dbt_so_insights_dev') }}"
+      threads: 4
+      location: US
+```
 
 4.  **Set Environment Variables:** Before running any dbt command, set the required environment variables in your terminal session. Replace the placeholder values with your actual data:
     ```bash
