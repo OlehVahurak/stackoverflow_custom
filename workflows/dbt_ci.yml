@@ -1,0 +1,38 @@
+name: dbt Continuous Integration
+
+on:
+  push:
+    branches:
+      - main # Uruchom przy każdym pushu do gałęzi main
+  pull_request:
+    branches:
+      - main # Uruchom przy każdym nowym Pull Request
+
+jobs:
+  dbt_build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install dbt-bigquery
+
+      - name: Install dbt packages
+        run: dbt deps
+
+      - name: Create profiles.yml for CI/CD
+        run: |
+          mkdir -p ~/.dbt
+          echo "${{ secrets.DBT_PROFILES_YML }}" > ~/.dbt/profiles.yml
+        shell: bash
+        env:
+          DBT_PROFILES_YML: ${{ secrets.DBT_PROFILES_YML }} # Użycie tajnego klucza
+
+      - name: Run dbt build (Transformation and Tests)
+        run: dbt build
+        # Opcjonalnie możesz użyć 'dbt test' dla PR, a 'dbt build' tylko dla push na main
