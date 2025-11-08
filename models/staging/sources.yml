@@ -1,0 +1,16 @@
+
+version: 2
+
+sources:
+  - name: stackoverflow_raw_data # Zmień nazwę dla jasności
+  
+    project: polar-gasket-477509-q6 
+    
+    
+    dataset: stackoverflow_custom 
+    
+    tables:
+      - name: posts_questions
+      - name: posts_answers
+      - name: users
+      - name: tags
