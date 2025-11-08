@@ -30,9 +30,10 @@ The data pipeline employs a robust dimensional model to ensure optimal performan
 
 The final analysis is presented in a Looker Studio dashboard:
 
-* **Primary Visualization:** A **Scatter Chart** comparing **Unresolved Question Count** (X-Axis) vs. **Demand Index** (Y-Axis). 
-* **Insight:** Tags situated in the **upper-right quadrant** represent the most significant overlap of persistent problems and high user demand.
-* **Report Access:** **[Insert Link to your public Looker Studio report]**
+* **Primary Visualization:** A **Horizontal Bar Chart** ranking the **Top 10 Topics** by the calculated **Demand Index**. The chart clearly shows the massive gap between user demand (views) and problem resolution.
+* **Interpretation:** The x-axis scale (in thousands) shows that tags like 'favicon' and 'calculator' have a disproportionately high number of views per unresolved question (Demand Index $\approx$ 380K), indicating extreme user frustration and the most urgent need for expert answers. The accompanying table highlights the
+* **Absolute Demand** for major languages (`python`, `java`, `android`), showing their total volume of unresolved questions and views.
+* **Report Access:** **[Looker Studio report](https://lookerstudio.google.com/s/u6fZ0gs8I1o)**
 
 ---
 
