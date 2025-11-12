@@ -7,7 +7,7 @@ WITH date_range AS (
   SELECT
     MIN(DATE(creation_date)) AS start_date,
     MAX(DATE(creation_date)) AS end_date
-  FROM {{ source('stackoverflow_raw', 'posts_questions') }} 
+  FROM {{ source('stackoverflow_raw_data', 'posts_questions') }} 
 ),
 all_dates AS (
   SELECT day
@@ -23,3 +23,4 @@ SELECT
   EXTRACT(DAYOFWEEK FROM day) AS day_of_week,
   EXTRACT(QUARTER FROM day) AS quarter
 FROM all_dates
+
