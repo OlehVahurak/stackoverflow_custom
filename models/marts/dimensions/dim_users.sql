@@ -14,4 +14,5 @@ SELECT
     views,
     profile_image_url,
     website_url
-FROM {{ source('stackoverflow_raw', 'users') }}
+FROM {{ source('stackoverflow_raw_data', 'users') }}
+
