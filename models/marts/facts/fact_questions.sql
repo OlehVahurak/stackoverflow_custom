@@ -11,10 +11,10 @@ SELECT
     q.view_count,
     q.answer_count,
     q.comment_count,
-    -- Użyj CAST, jak to zrobiłeś, do tworzenia flagi INT64
-    CAST((q.accepted_answer_id IS NOT NULL) AS INT64) AS is_answered,
-FROM {{ source('stackoverflow_raw', 'posts_questions') }} q
-LEFT JOIN {{ ref('dim_time') }} dt -- Używamy ref() do wymiaru czasu
+    CAST((q.accepted_answer_id IS NOT NULL) AS INT64) AS is_answered
+FROM {{ source('stackoverflow_raw_data', 'posts_questions') }} q
+LEFT JOIN {{ ref('dim_time') }} dt
     ON DATE(q.creation_date) = dt.full_date
 WHERE q.post_type_id = 1
+
 
