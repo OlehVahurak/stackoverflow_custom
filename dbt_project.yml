@@ -1,4 +1,5 @@
-name: stackoverflow_custom
+%%writefile /content/stackoverflow_custom/dbt_project.yml
+name: stack_overflow_insights
 version: '1.0'
 config-version: 2
 
@@ -13,4 +14,5 @@ snapshot-paths: ["snapshots"]
 target-path: "target"
 clean-targets:
   - "target"
-  - "dbt_modules"
+  - "dbt_packages"
+
